@@ -43,6 +43,6 @@
 
         <PackageReference Include="Soenneker.Blob.Container" Version="1.0.126" />
 
-        <PackageReference Include="Soenneker.Blob.Fetch" Version="1.0.190" />
+        <PackageReference Include="Soenneker.Blob.Fetch" Version="1.0.193" />
     </ItemGroup>
 </Project>

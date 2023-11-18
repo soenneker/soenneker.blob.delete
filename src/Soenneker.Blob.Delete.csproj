@@ -41,7 +41,7 @@
 
         <PackageReference Include="Soenneker.Blob.Client" Version="2.1.27" />
 
-        <PackageReference Include="Soenneker.Blob.Container" Version="2.1.26" />
+        <PackageReference Include="Soenneker.Blob.Container" Version="2.1.27" />
 
         <PackageReference Include="Soenneker.Blob.Fetch" Version="2.1.37" />
     </ItemGroup>

@@ -8,5 +8,5 @@
 ## Installation
 
 ```
-Install-Package Soenneker.Blob.Delete
+dotnet add package Soenneker.Blob.Delete
 ```

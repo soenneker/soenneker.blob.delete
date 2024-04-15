@@ -9,6 +9,8 @@ using Soenneker.Blob.Client.Abstract;
 using Soenneker.Blob.Container.Abstract;
 using Soenneker.Blob.Delete.Abstract;
 using Soenneker.Blob.Fetch.Abstract;
+using Soenneker.Extensions.Task;
+using Soenneker.Extensions.ValueTask;
 
 namespace Soenneker.Blob.Delete;
 
@@ -33,9 +35,9 @@ public class BlobDeleteUtil: IBlobDeleteUtil
     {
         _logger.LogDebug("Beginning deletion of {url}", relativeUrl);
 
-        BlobClient blobClient = await _blobClientUtil.GetClient(containerName, relativeUrl);
+        BlobClient blobClient = await _blobClientUtil.Get(containerName, relativeUrl).NoSync();
 
-        Response<bool> response = await blobClient.DeleteIfExistsAsync();
+        Response<bool> response = await blobClient.DeleteIfExistsAsync().NoSync();
         // TODO: Handle this response
 
         _logger.LogDebug("Finished deletion of {url}", relativeUrl);
@@ -47,8 +49,8 @@ public class BlobDeleteUtil: IBlobDeleteUtil
     {
         _logger.LogDebug("Beginning deletion of container {name}", containerName);
             
-        BlobContainerClient containerClient = await _blobContainerUtil.GetClient(containerName);
-        Response<bool> response = await containerClient.DeleteIfExistsAsync();
+        BlobContainerClient containerClient = await _blobContainerUtil.Get(containerName).NoSync();
+        Response<bool> response = await containerClient.DeleteIfExistsAsync().NoSync();
 
         _logger.LogDebug("Finished deletion of container {name}", containerName);
 
@@ -59,13 +61,13 @@ public class BlobDeleteUtil: IBlobDeleteUtil
     {
         _logger.LogDebug("Beginning deletion of directory {directory}", directory);
 
-        List<BlobItem> blobs = await _blobFetchUtil.GetAllBlobItems(containerName, directory);
+        List<BlobItem> blobs = await _blobFetchUtil.GetAllBlobItems(containerName, directory).NoSync();
 
-        List<bool> deleteStatusList = new();
+        List<bool> deleteStatusList = [];
 
         foreach (BlobItem? blob in blobs)
         {
-            Response<bool> response = await Delete(containerName, blob.Name);
+            Response<bool> response = await Delete(containerName, blob.Name).NoSync();
 
             if (!response.Value)
                 deleteStatusList.Add(false);

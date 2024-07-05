@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System.Threading;
+using System.Threading.Tasks;
 using Azure;
 
 namespace Soenneker.Blob.Delete.Abstract;
@@ -9,13 +10,13 @@ namespace Soenneker.Blob.Delete.Abstract;
 /// </summary>
 public interface IBlobDeleteUtil
 {
-    ValueTask<Response<bool>> Delete(string containerName, string relativeUrl);
+    ValueTask<Response<bool>> Delete(string containerName, string relativeUrl, CancellationToken cancellationToken = default);
 
-    ValueTask<bool> DeleteContainer(string containerName);
+    ValueTask<bool> DeleteContainer(string containerName, CancellationToken cancellationToken = default);
 
     /// <summary>
     /// Deletes each blob inside a directory
     /// </summary>
     /// <returns>True if all deletes are successful, False if any single one fails</returns>
-    ValueTask<bool> DeleteDirectory(string containerName, string directory);
+    ValueTask<bool> DeleteDirectory(string containerName, string directory, CancellationToken cancellationToken = default);
 }

@@ -21,7 +21,7 @@
     </ItemGroup>
 
     <ItemGroup>
-        <ProjectReference Include="..\src\Soenneker.Blob.Delete.csproj" />
+        <ProjectReference Include="..\..\src\Soenneker.Blob.Delete.csproj" />
     </ItemGroup>
 
 </Project>

@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Azure;
@@ -77,6 +76,6 @@ public class BlobDeleteUtil: IBlobDeleteUtil
         _logger.LogDebug("Finished deletion of Blob directory ({directory})", directory);
 
         // if any were unsuccessful we return false for this whole thing
-        return !deleteStatusList.Any();
+        return deleteStatusList.Count != 0;
     }
 }

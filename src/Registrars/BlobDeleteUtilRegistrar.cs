@@ -11,6 +11,13 @@ namespace Soenneker.Blob.Delete.Registrars;
 /// </summary>
 public static class BlobDeleteUtilRegistrar
 {
+    public static void AddBlobDeleteUtilAsSingleton(this IServiceCollection services)
+    {
+        services.AddBlobClientUtilAsSingleton();
+        services.AddBlobFetchUtilAsSingleton();
+        services.TryAddSingleton<IBlobDeleteUtil, BlobDeleteUtil>();
+    }
+
     public static void AddBlobDeleteUtilAsScoped(this IServiceCollection services)
     {
         services.AddBlobClientUtilAsSingleton();

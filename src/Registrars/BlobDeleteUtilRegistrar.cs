@@ -13,8 +13,8 @@ public static class BlobDeleteUtilRegistrar
 {
     public static IServiceCollection AddBlobDeleteUtilAsSingleton(this IServiceCollection services)
     {
-        services.AddBlobClientUtilAsSingleton();
-        services.AddBlobFetchUtilAsSingleton()
+        services.AddBlobClientUtilAsSingleton()
+                .AddBlobFetchUtilAsSingleton()
                 .TryAddSingleton<IBlobDeleteUtil, BlobDeleteUtil>();
 
         return services;
@@ -22,8 +22,8 @@ public static class BlobDeleteUtilRegistrar
 
     public static IServiceCollection AddBlobDeleteUtilAsScoped(this IServiceCollection services)
     {
-        services.AddBlobClientUtilAsSingleton();
-        services.AddBlobFetchUtilAsScoped()
+        services.AddBlobClientUtilAsSingleton()
+                .AddBlobFetchUtilAsScoped()
                 .TryAddScoped<IBlobDeleteUtil, BlobDeleteUtil>();
 
         return services;

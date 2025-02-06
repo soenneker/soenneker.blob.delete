@@ -2,7 +2,6 @@ using Soenneker.Blob.Delete.Abstract;
 using Soenneker.Tests.FixturedUnit;
 using Xunit;
 
-
 namespace Soenneker.Blob.Delete.Tests;
 
 [Collection("Collection")]
@@ -18,6 +17,5 @@ public class BlobDeleteUtilTests : FixturedUnitTest
     [Fact]
     public void Default()
     {
-
     }
 }

@@ -15,15 +15,14 @@ using Soenneker.Extensions.ValueTask;
 namespace Soenneker.Blob.Delete;
 
 ///<inheritdoc cref="IBlobDeleteUtil"/>
-public class BlobDeleteUtil: IBlobDeleteUtil
+public sealed class BlobDeleteUtil : IBlobDeleteUtil
 {
     private readonly IBlobClientUtil _blobClientUtil;
     private readonly IBlobContainerUtil _blobContainerUtil;
     private readonly IBlobFetchUtil _blobFetchUtil;
     private readonly ILogger<BlobDeleteUtil> _logger;
 
-    public BlobDeleteUtil(IBlobClientUtil blobClientUtil, IBlobContainerUtil blobContainerUtil,
-        IBlobFetchUtil blobFetchUtil, ILogger<BlobDeleteUtil> logger)
+    public BlobDeleteUtil(IBlobClientUtil blobClientUtil, IBlobContainerUtil blobContainerUtil, IBlobFetchUtil blobFetchUtil, ILogger<BlobDeleteUtil> logger)
     {
         _blobClientUtil = blobClientUtil;
         _blobContainerUtil = blobContainerUtil;
@@ -31,7 +30,7 @@ public class BlobDeleteUtil: IBlobDeleteUtil
         _logger = logger;
     }
 
-    public async ValueTask<Response<bool>> Delete(string containerName, string relativeUrl, CancellationToken cancellationToken = default) 
+    public async ValueTask<Response<bool>> Delete(string containerName, string relativeUrl, CancellationToken cancellationToken = default)
     {
         _logger.LogDebug("Beginning deletion of Blob ({url})...", relativeUrl);
 
@@ -45,10 +44,10 @@ public class BlobDeleteUtil: IBlobDeleteUtil
         return response;
     }
 
-    public async ValueTask<bool> DeleteContainer(string containerName, CancellationToken cancellationToken = default) 
+    public async ValueTask<bool> DeleteContainer(string containerName, CancellationToken cancellationToken = default)
     {
         _logger.LogDebug("Beginning deletion of Blob container ({name})...", containerName);
-            
+
         BlobContainerClient containerClient = await _blobContainerUtil.Get(containerName, cancellationToken: cancellationToken).NoSync();
         Response<bool> response = await containerClient.DeleteIfExistsAsync(cancellationToken: cancellationToken).NoSync();
 
@@ -56,8 +55,8 @@ public class BlobDeleteUtil: IBlobDeleteUtil
 
         return response;
     }
-        
-    public async ValueTask<bool> DeleteDirectory(string containerName, string directory, CancellationToken cancellationToken = default) 
+
+    public async ValueTask<bool> DeleteDirectory(string containerName, string directory, CancellationToken cancellationToken = default)
     {
         _logger.LogDebug("Beginning deletion of Blob directory ({directory})...", directory);
 

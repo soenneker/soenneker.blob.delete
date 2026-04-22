@@ -1,20 +1,19 @@
 using Soenneker.Blob.Delete.Abstract;
-using Soenneker.Tests.FixturedUnit;
-using Xunit;
+using Soenneker.Tests.HostedUnit;
 
 namespace Soenneker.Blob.Delete.Tests;
 
-[Collection("Collection")]
-public class BlobDeleteUtilTests : FixturedUnitTest
+[ClassDataSource<Host>(Shared = SharedType.PerTestSession)]
+public class BlobDeleteUtilTests : HostedUnitTest
 {
     private readonly IBlobDeleteUtil _util;
 
-    public BlobDeleteUtilTests(Fixture fixture, ITestOutputHelper output) : base(fixture, output)
+    public BlobDeleteUtilTests(Host host) : base(host)
     {
         _util = Resolve<IBlobDeleteUtil>(true);
     }
 
-    [Fact]
+    [Test]
     public void Default()
     {
     }

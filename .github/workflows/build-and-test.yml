@@ -38,7 +38,7 @@ jobs:
         run: dotnet build test/Soenneker.Blob.Delete.Tests/Soenneker.Blob.Delete.Tests.csproj --configuration Release --no-restore --verbosity minimal
 
       - name: Test
-        run: dotnet test test/Soenneker.Blob.Delete.Tests/Soenneker.Blob.Delete.Tests.csproj --configuration Release --no-build --no-restore --verbosity minimal
+        run: dotnet test --project test/Soenneker.Blob.Delete.Tests/Soenneker.Blob.Delete.Tests.csproj --configuration Release --no-build --no-restore --verbosity minimal
 
       - name: Pack
         run: dotnet pack src/Soenneker.Blob.Delete/Soenneker.Blob.Delete.csproj --configuration Release --no-build --no-restore --output . --verbosity minimal

@@ -10,8 +10,21 @@ namespace Soenneker.Blob.Delete.Abstract;
 /// </summary>
 public interface IBlobDeleteUtil
 {
+    /// <summary>
+    /// Executes the delete operation.
+    /// </summary>
+    /// <param name="containerName">The container name.</param>
+    /// <param name="relativeUrl">The relative url.</param>
+    /// <param name="cancellationToken">The cancellation token.</param>
+    /// <returns>A task containing the result of the operation.</returns>
     ValueTask<Response<bool>> Delete(string containerName, string relativeUrl, CancellationToken cancellationToken = default);
 
+    /// <summary>
+    /// Deletes container.
+    /// </summary>
+    /// <param name="containerName">The container name.</param>
+    /// <param name="cancellationToken">The cancellation token.</param>
+    /// <returns>A task containing the result of the operation.</returns>
     ValueTask<bool> DeleteContainer(string containerName, CancellationToken cancellationToken = default);
 
     /// <summary>

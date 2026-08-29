@@ -11,25 +11,28 @@ namespace Soenneker.Blob.Delete.Abstract;
 public interface IBlobDeleteUtil
 {
     /// <summary>
-    /// Executes the delete operation.
+    /// Removes the entry associated with the specified key.
     /// </summary>
-    /// <param name="containerName">The container name.</param>
-    /// <param name="relativeUrl">The relative url.</param>
-    /// <param name="cancellationToken">The cancellation token.</param>
-    /// <returns>A task containing the result of the operation.</returns>
+    /// <param name="containerName">Name of the container to target.</param>
+    /// <param name="relativeUrl">URL of the relative to target.</param>
+    /// <param name="cancellationToken">Token used to cancel the operation.</param>
+    /// <returns>A task whose result is the requested response.</returns>
     ValueTask<Response<bool>> Delete(string containerName, string relativeUrl, CancellationToken cancellationToken = default);
 
     /// <summary>
     /// Deletes container.
     /// </summary>
-    /// <param name="containerName">The container name.</param>
-    /// <param name="cancellationToken">The cancellation token.</param>
-    /// <returns>A task containing the result of the operation.</returns>
+    /// <param name="containerName">Name of the container to target.</param>
+    /// <param name="cancellationToken">Token used to cancel the operation.</param>
+    /// <returns>true if deletes container; otherwise, false.</returns>
     ValueTask<bool> DeleteContainer(string containerName, CancellationToken cancellationToken = default);
 
     /// <summary>
     /// Deletes each blob inside a directory
     /// </summary>
+    /// <param name="containerName">Name of the container to target.</param>
+    /// <param name="directory">Directory to read from or write to.</param>
+    /// <param name="cancellationToken">Token used to cancel the operation.</param>
     /// <returns>True if all deletes are successful, False if any single one fails</returns>
     ValueTask<bool> DeleteDirectory(string containerName, string directory, CancellationToken cancellationToken = default);
 }

@@ -12,10 +12,10 @@ namespace Soenneker.Blob.Delete.Registrars;
 public static class BlobDeleteUtilRegistrar
 {
     /// <summary>
-    /// Adds blob delete util as singleton.
+    /// Registers Blob Delete Util with a singleton lifetime.
     /// </summary>
-    /// <param name="services">The service collection.</param>
-    /// <returns>The result of the operation.</returns>
+    /// <param name="services">Service collection that receives the registration.</param>
+    /// <returns>The same service collection, so additional registrations can be chained.</returns>
     public static IServiceCollection AddBlobDeleteUtilAsSingleton(this IServiceCollection services)
     {
         services.AddBlobClientUtilAsSingleton().AddBlobFetchUtilAsSingleton().TryAddSingleton<IBlobDeleteUtil, BlobDeleteUtil>();
@@ -24,10 +24,10 @@ public static class BlobDeleteUtilRegistrar
     }
 
     /// <summary>
-    /// Adds blob delete util as scoped.
+    /// Registers Blob Delete Util with a scoped lifetime.
     /// </summary>
-    /// <param name="services">The service collection.</param>
-    /// <returns>The result of the operation.</returns>
+    /// <param name="services">Service collection that receives the registration.</param>
+    /// <returns>The same service collection, so additional registrations can be chained.</returns>
     public static IServiceCollection AddBlobDeleteUtilAsScoped(this IServiceCollection services)
     {
         services.AddBlobClientUtilAsSingleton().AddBlobFetchUtilAsScoped().TryAddScoped<IBlobDeleteUtil, BlobDeleteUtil>();

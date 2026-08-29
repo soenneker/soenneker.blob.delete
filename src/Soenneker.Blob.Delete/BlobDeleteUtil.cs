@@ -14,7 +14,7 @@ using Soenneker.Extensions.ValueTask;
 
 namespace Soenneker.Blob.Delete;
 
-///<inheritdoc cref="IBlobDeleteUtil"/>
+/// <inheritdoc cref="IBlobDeleteUtil"/>
 public sealed class BlobDeleteUtil : IBlobDeleteUtil
 {
     private readonly IBlobClientUtil _blobClientUtil;

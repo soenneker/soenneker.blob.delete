@@ -62,19 +62,18 @@ public sealed class BlobDeleteUtil : IBlobDeleteUtil
 
         List<BlobItem> blobs = await _blobFetchUtil.GetAllBlobItems(containerName, directory, cancellationToken).NoSync();
 
-        List<bool> deleteStatusList = [];
+        var allDeleted = true;
 
         foreach (BlobItem? blob in blobs)
         {
             Response<bool> response = await Delete(containerName, blob.Name, cancellationToken).NoSync();
 
             if (!response.Value)
-                deleteStatusList.Add(false);
+                allDeleted = false;
         }
 
         _logger.LogDebug("Finished deletion of Blob directory ({directory})", directory);
 
-        // if any were unsuccessful we return false for this whole thing
-        return deleteStatusList.Count != 0;
+        return allDeleted;
     }
 }

@@ -5,7 +5,7 @@
 
 # Soenneker.Blob.Delete
 
-A utility library for Azure Blob storage delete operations Typically Scoped IoC.
+Deletes individual Azure blobs, entire containers, or every blob under a virtual-directory prefix.
 
 ## Install
 
@@ -13,32 +13,60 @@ A utility library for Azure Blob storage delete operations Typically Scoped IoC.
 dotnet add package Soenneker.Blob.Delete
 ```
 
-## Quick start
+Register the utility in `Program.cs`:
 
 ```csharp
 using Soenneker.Blob.Delete.Registrars;
-using Microsoft.Extensions.DependencyInjection;
-
-var services = new ServiceCollection();
-var result = services.AddBlobDeleteUtilAsSingleton();
+builder.Services.AddBlobDeleteUtilAsSingleton();
 ```
 
-Registers Blob Delete Util with a singleton lifetime.
+Scoped registration is also available.
 
-## What you get
+The underlying Blob packages require `Azure:Storage:Blob:ConnectionString` in configuration. Store that value in a secret provider.
 
-- `IBlobDeleteUtil` — A utility library for Azure Blob storage delete operations Typically Scoped IoC.
-- `BlobDeleteUtilRegistrar` — A utility library for Azure Blob storage delete operations.
+## Delete one blob
 
-## API at a glance
+```csharp
+Response<bool> response = await blobDelete.Delete(
+    "invoices",
+    "2026/obsolete.pdf",
+    cancellationToken);
 
-| API | What it does | Result / important behavior |
-| --- | --- | --- |
-| `IBlobDeleteUtil.Delete(containerName, relativeUrl, cancellationToken)` | Removes the entry associated with the specified key. | A task whose result is the requested response. |
-| `IBlobDeleteUtil.DeleteDirectory(containerName, directory, cancellationToken)` | Deletes each blob inside a directory. | True if all deletes are successful, False if any single one fails. |
-| `BlobDeleteUtilRegistrar.AddBlobDeleteUtilAsSingleton(services)` | Registers Blob Delete Util with a singleton lifetime. | The same service collection, so additional registrations can be chained. |
-| `BlobDeleteUtilRegistrar.AddBlobDeleteUtilAsScoped(services)` | Registers Blob Delete Util with a scoped lifetime. | The same service collection, so additional registrations can be chained. |
+bool deleted = response.Value;
+```
 
-## Practical notes
+`false` means the blob did not exist. Azure authorization, lease, snapshot, and service failures throw `RequestFailedException`. The default Azure delete behavior does not include snapshots, so a blob with snapshots may require explicit snapshot cleanup before this method can delete it.
+
+## Delete a virtual directory
+
+Azure Blob Storage has blob-name prefixes rather than physical directories. This method lists the supplied prefix and deletes each returned blob sequentially:
+
+```csharp
+bool allDeleted = await blobDelete.DeleteDirectory(
+    "exports",
+    "temporary/2026/",
+    cancellationToken);
+```
+
+The result is `true` when every listed blob was deleted or no blobs matched. It is `false` if a listed blob disappeared before its delete completed. Azure request failures are not converted to `false`; they stop the operation and propagate.
+
+Prefix matching can include more blobs than intended when the trailing delimiter is omitted. Use `temporary/2026/`, not `temporary/2026`, when only that virtual directory should be removed.
+
+## Delete a container
+
+```csharp
+bool deleted = await blobDelete.DeleteContainer(
+    "temporary-exports",
+    cancellationToken);
+```
+
+Container deletion removes all blobs, versions, and snapshots in that container. Treat the container name as trusted application configuration, not direct user input.
+
+## Important behavior
+
+- The shared client/container utilities normalize container names to lowercase.
+- Those utilities ensure the target container exists while resolving clients. As a result, deleting a missing blob or container can briefly create the missing container before deletion. Avoid using these methods as existence probes.
+- Directory deletion is not transactional. Cancellation or a failure can leave a partially deleted prefix.
+- Soft delete, versioning, immutability policies, legal holds, and leases can change whether data is recoverable or whether deletion is allowed.
 
 - Cancellation stops pending work; it does not undo work that has already completed.

@@ -42,6 +42,6 @@
         <None Include="..\..\LICENSE" Pack="true" PackagePath="\" />
         <None Include="..\..\icon.png" Pack="true" PackagePath="\" />
         <PackageReference Include="Soenneker.Blob.Client" Version="11.0.2276" />
-        <PackageReference Include="Soenneker.Blob.Fetch" Version="11.0.2452" />
+        <PackageReference Include="Soenneker.Blob.Fetch" Version="11.0.2453" />
     </ItemGroup>
 </Project>

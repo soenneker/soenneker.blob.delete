@@ -32,33 +32,38 @@ public sealed class BlobDeleteUtil : IBlobDeleteUtil
 
     public async ValueTask<Response<bool>> Delete(string containerName, string relativeUrl, CancellationToken cancellationToken = default)
     {
-        _logger.LogDebug("Beginning deletion of Blob ({url})...", relativeUrl);
+        if (_logger.IsEnabled(LogLevel.Debug))
+            _logger.LogDebug("Beginning deletion of Blob ({url})...", relativeUrl);
 
         BlobClient blobClient = await _blobClientUtil.Get(containerName, relativeUrl, cancellationToken: cancellationToken).NoSync();
 
         Response<bool> response = await blobClient.DeleteIfExistsAsync(cancellationToken: cancellationToken).NoSync();
         // TODO: Handle this response
 
-        _logger.LogDebug("Finished deletion of Blob ({url})", relativeUrl);
+        if (_logger.IsEnabled(LogLevel.Debug))
+            _logger.LogDebug("Finished deletion of Blob ({url})", relativeUrl);
 
         return response;
     }
 
     public async ValueTask<bool> DeleteContainer(string containerName, CancellationToken cancellationToken = default)
     {
-        _logger.LogDebug("Beginning deletion of Blob container ({name})...", containerName);
+        if (_logger.IsEnabled(LogLevel.Debug))
+            _logger.LogDebug("Beginning deletion of Blob container ({name})...", containerName);
 
         BlobContainerClient containerClient = await _blobContainerUtil.Get(containerName, cancellationToken: cancellationToken).NoSync();
         Response<bool> response = await containerClient.DeleteIfExistsAsync(cancellationToken: cancellationToken).NoSync();
 
-        _logger.LogDebug("Finished deletion of Blob container ({name})", containerName);
+        if (_logger.IsEnabled(LogLevel.Debug))
+            _logger.LogDebug("Finished deletion of Blob container ({name})", containerName);
 
         return response;
     }
 
     public async ValueTask<bool> DeleteDirectory(string containerName, string directory, CancellationToken cancellationToken = default)
     {
-        _logger.LogDebug("Beginning deletion of Blob directory ({directory})...", directory);
+        if (_logger.IsEnabled(LogLevel.Debug))
+            _logger.LogDebug("Beginning deletion of Blob directory ({directory})...", directory);
 
         List<BlobItem> blobs = await _blobFetchUtil.GetAllBlobItems(containerName, directory, cancellationToken).NoSync();
 
@@ -72,7 +77,8 @@ public sealed class BlobDeleteUtil : IBlobDeleteUtil
                 allDeleted = false;
         }
 
-        _logger.LogDebug("Finished deletion of Blob directory ({directory})", directory);
+        if (_logger.IsEnabled(LogLevel.Debug))
+            _logger.LogDebug("Finished deletion of Blob directory ({directory})", directory);
 
         return allDeleted;
     }
